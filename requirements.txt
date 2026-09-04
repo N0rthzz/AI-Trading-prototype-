@@ -1,0 +1,12 @@
+alpaca==1.0.0
+ccxt==4.5.77
+metatrader5==5.0.6162
+nest_asyncio==1.6.0
+openai==3.8.0
+pandas==3.0.5
+pandas_ta==0.4.71b0
+pydantic==2.13.5
+python-dotenv==1.2.3
+Requests==2.34.2
+schedule==1.2.2
+yfinance==1.7.0
