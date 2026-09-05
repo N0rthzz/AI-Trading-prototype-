@@ -68,8 +68,12 @@ nest_asyncio.apply()
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 
-# 1. ดึงค่ามาจาก .env ก่อน
+# 1. ต้องสั่งให้มันไปดูดค่าจากไฟล์ .env มาเก็บไว้ในตัวแปรก่อน
 typhoon_api_key = os.getenv("TYPHOON_API_KEY")
+print(f"DEBUG: Raw Key -> {repr(typhoon_api_key)}")
+# 2. ค่อยสั่งปริ้นต์เช็คค่า (ต้องอยู่ใต้บรรทัดดึงค่าเสมอ)
+print(f"DEBUG: Key starts with -> {str(typhoon_api_key)[:5]}")
+print(f"DEBUG: Key length -> {len(str(typhoon_api_key))}")
 
 # 2. เช็คว่ามีค่าไหม (อยู่นอกวงเล็บ)
 if not typhoon_api_key:
@@ -200,9 +204,7 @@ class QuantMultiAgentTrader:
         # ==========================================
         # 🧠 ส่วนที่ 1: AI วิเคราะห์ข้อมูล (TYPHOON LLM)
         # ==========================================
-        import json
-        import os
-        from openai import AsyncOpenAI
+
         
         # ใส่ API Key ของ Typhoon (หรือตั้งเป็น Environment Variable)
         typhoon_api_key = "TYPHOON_API_KEY"
@@ -212,11 +214,15 @@ class QuantMultiAgentTrader:
         adjusted_scores = {"Macro": 0, "Geo": 0, "Tech": 0, "Asset": 0}
         master_reasoning = ""
         
-        if not typhoon_api_key or typhoon_api_key == "ใส่_KEY_ของ_TYPHOON_ตรงนี้":
+        # 1. ดูดค่าจาก .env ใหม่เลยเพื่อความชัวร์ในคลาสนี้
+        typhoon_api_key = os.getenv("TYPHOON_API_KEY")
+
+        # 2. เช็คค่า
+        if not typhoon_api_key:
             print("⚠️ ไม่พบ TYPHOON_API_KEY")
             master_reasoning = "System Error: Missing Typhoon API Key."
         else:
-            # ชี้เป้าไปที่ Server ของ Typhoon
+            # 3. ชี้เป้าไปที่ Server ของ Typhoon
             client = AsyncOpenAI(
                 api_key=typhoon_api_key,
                 base_url="https://api.opentyphoon.ai/v1"
